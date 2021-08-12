@@ -39,9 +39,9 @@ def execute_on(arg):
     print("----> SWITCHING ON LED #" + str(n))
 
 
-def execute_text(arg):
+def execute_print(arg):
     if arg == None:
-        raise ValueError("Received TEXT without an arg")
+        raise ValueError("Received PRINT without an arg")
 
     text = "".join(arg)
     print(text)
@@ -53,6 +53,12 @@ def execute_boolean(b):
     elif b.lower() == "bright":
         return True
     elif b.lower() == "clap":
+        return True
+    elif b.lower() == "buttona":
+        return True
+    elif b.lower() == "buttonb":
+        return True
+    elif b.lower() == "buttontop":
         return True
     else:
         raise ValueError("Unknown boolean " + b)
@@ -85,7 +91,7 @@ def execute_conditional(arg):
         execute(command, " ".join(args))
 
 
-def execute_wait(arg):
+def execute_sleep(arg):
     n = to_int(arg)
 
     if n == None:
@@ -96,8 +102,8 @@ def execute_wait(arg):
 
 
 def execute(command, arg):
-    if command.lower() == "text":
-        execute_text(arg)
+    if command.lower() == "print":
+        execute_print(arg)
     elif command.lower() == "clear":
         execute_clear()
     elif command.lower() == "on":
@@ -108,8 +114,8 @@ def execute(command, arg):
         execute_image(arg)
     elif command.lower() == "if":
         execute_conditional(arg)
-    elif command.lower() == "wait":
-        execute_wait(arg)
+    elif command.lower() == "sleep":
+        execute_sleep(arg)
     else:
         raise ValueError("Unknown command " + command)
 
