@@ -1,14 +1,2 @@
-text HELLO WORLD
-wait
-clear
-if not dark image duck
-
-ON 50
-
-OFF 200
-
-IF DARK clear
-
-
-text ABCD
-wait 2000
+if buttona show ghost
+if not buttona show christmas

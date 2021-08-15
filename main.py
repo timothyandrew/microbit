@@ -1,4 +1,4 @@
-import time
+from microbit import *
 
 
 def to_int(s):
@@ -11,55 +11,67 @@ def to_int(s):
 
 
 def execute_clear():
-    print("----> CLEARING SCREEN")
-
+    display.clear()
 
 def execute_image(arg):
     if arg == None:
         raise ValueError("Received IMAGE without an arg")
 
-    print("----> DISPLAYING IMAGE: " + arg)
+    to_image = { 
+        "heart": Image.HEART,
+        "small heart": Image.HEART_SMALL,
+        "happy": Image.HAPPY,
+        "smile": Image.SMILE,
+        "sad": Image.SAD,
+        "confused": Image.CONFUSED,
+        "angry": Image.ANGRY,
+        "asleep": Image.ASLEEP,
+        "surprised": Image.SURPRISED,
+        "silly": Image.SILLY,
+        "meh": Image.MEH,
+        "yes": Image.YES,
+        "no": Image.NO,
+        "arrow": Image.ARROW_E,
+        "triangle": Image.TRIANGLE,
+        "chess": Image.CHESSBOARD,
+        "diamond": Image.DIAMOND,
+        "square": Image.SQUARE,
+        "rabbit": Image.RABBIT,
+        "cow": Image.COW,
+        "music": Image.MUSIC_QUAVER,
+        "christmas": Image.XMAS,
+        "pacman": Image.PACMAN,
+        "target": Image.TARGET,
+        "tshirt": Image.TSHIRT,
+        "roller skate": Image.ROLLERSKATE,
+        "duck": Image.DUCK,
+        "house": Image.HOUSE,
+        "tortoise": Image.TORTOISE,
+        "butterfly": Image.BUTTERFLY,
+        "ghost": Image.GHOST,
+        "sword": Image.SWORD,
+        "giraffe": Image.GIRAFFE,
+        "skull": Image.SKULL,
+        "umbrella": Image.UMBRELLA,
+    }
 
-
-def execute_off(arg):
-    n = to_int(arg)
-
-    if n == None:
-        raise ValueError("OFF needs a number")
-
-    print("----> SWITCHING OFF LED #" + str(n))
-
-
-def execute_on(arg):
-    n = to_int(arg)
-
-    if n == None:
-        raise ValueError("ON needs a number")
-
-    print("----> SWITCHING ON LED #" + str(n))
-
+    display.show(to_image[arg.lower()])
 
 def execute_print(arg):
     if arg == None:
         raise ValueError("Received PRINT without an arg")
 
-    text = "".join(arg)
-    print(text)
-
+    display.scroll(arg)
 
 def execute_boolean(b):
     if b.lower() == "dark":
-        return True
+        return display.read_light_level() < 5
     elif b.lower() == "bright":
-        return True
-    elif b.lower() == "clap":
-        return True
+        return display.read_light_level() > 5
     elif b.lower() == "buttona":
-        return True
+        return button_a.is_pressed()
     elif b.lower() == "buttonb":
-        return True
-    elif b.lower() == "buttontop":
-        return True
+        return button_b.is_pressed()
     else:
         raise ValueError("Unknown boolean " + b)
 
@@ -80,11 +92,6 @@ def execute_conditional(arg):
     conditional = execute_boolean(boolean)
     conditional = (not conditional) if is_negative else conditional
 
-    if is_negative:
-        print(f"----> Boolean NOT {boolean} evaluated to {conditional}")
-    else:
-        print(f"----> Boolean {boolean} evaluated to {conditional}")
-
     command = args.pop(0)
 
     if conditional:
@@ -95,10 +102,10 @@ def execute_sleep(arg):
     n = to_int(arg)
 
     if n == None:
-        time.sleep(500 / 1000)
+        sleep(1000)
         return
 
-    time.sleep(n / 1000)
+    sleep(n)
 
 
 def execute(command, arg):
@@ -106,15 +113,11 @@ def execute(command, arg):
         execute_print(arg)
     elif command.lower() == "clear":
         execute_clear()
-    elif command.lower() == "on":
-        execute_on(arg)
-    elif command.lower() == "off":
-        execute_off(arg)
-    elif command.lower() == "image":
+    elif command.lower() == "show":
         execute_image(arg)
     elif command.lower() == "if":
         execute_conditional(arg)
-    elif command.lower() == "sleep":
+    elif command.lower() == "wait":
         execute_sleep(arg)
     else:
         raise ValueError("Unknown command " + command)
@@ -130,8 +133,10 @@ def eval(line):
         execute(line[0], line[1])
 
 
-program = open('PROGRAM', 'r')
-lines = program.readlines()
+with open('PROGRAM') as file:
+    program = file.read()
+
+lines = program.split('\n')
 
 while True:
     [eval(line) for line in lines if line.strip() != ""]
