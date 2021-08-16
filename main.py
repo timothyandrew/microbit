@@ -1,4 +1,5 @@
 from microbit import *
+import music
 
 
 def to_int(s):
@@ -13,11 +14,42 @@ def to_int(s):
 def execute_clear():
     display.clear()
 
+
+def execute_music(arg):
+    if arg == None:
+        raise ValueError("Received MUSIC without an arg")
+
+    to_music = {
+        "dadadadum": music.DADADADUM,
+        "entertainer": music.ENTERTAINER,
+        "prelude": music.PRELUDE,
+        "ode": music.ODE,
+        "nyan": music.NYAN,
+        "ringtone": music.RINGTONE,
+        "funk": music.FUNK,
+        "blues": music.BLUES,
+        "birthday": music.BIRTHDAY,
+        "wedding": music.WEDDING,
+        "funeral": music.FUNERAL,
+        "punchline": music.PUNCHLINE,
+        "baddy": music.BADDY,
+        "chase": music.CHASE,
+        "bading": music.BA_DING,
+        "wawawaa": music.WAWAWAWAA,
+        "jumpup": music.JUMP_UP,
+        "jumpdown": music.JUMP_DOWN,
+        "powerup": music.POWER_UP,
+        "powerdown": music.POWER_DOWN
+    }
+
+    music.play(to_music[arg.lower()])
+
+
 def execute_image(arg):
     if arg == None:
         raise ValueError("Received IMAGE without an arg")
 
-    to_image = { 
+    to_image = {
         "heart": Image.HEART,
         "small heart": Image.HEART_SMALL,
         "happy": Image.HAPPY,
@@ -57,11 +89,13 @@ def execute_image(arg):
 
     display.show(to_image[arg.lower()])
 
+
 def execute_print(arg):
     if arg == None:
         raise ValueError("Received PRINT without an arg")
 
     display.scroll(arg)
+
 
 def execute_boolean(b):
     if b.lower() == "dark":
@@ -115,6 +149,8 @@ def execute(command, arg):
         execute_clear()
     elif command.lower() == "show":
         execute_image(arg)
+    elif command.lower() == "play":
+        execute_music(arg)
     elif command.lower() == "if":
         execute_conditional(arg)
     elif command.lower() == "wait":
