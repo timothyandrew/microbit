@@ -133,7 +133,7 @@ def eval(line):
         execute(line[0], line[1])
 
 
-with open('PROGRAM') as file:
+with open('program') as file:
     program = file.read()
 
 lines = program.split('\n')
