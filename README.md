@@ -32,3 +32,22 @@ play birthday
 - Control flow
 	- `if <boolean> <command>`
 	- `if not <boolean> <command>`
+
+
+## Installation / Setup
+
+```bash
+# Install prerequisites
+pip install uflash microfs
+
+# Plug in the microbit
+
+# Install Micropython
+uflash
+
+# Copy over the interpreter
+ufs put main.py
+
+# Copy the program (repeat _just_ this step as you change the `program` file)
+ufs put program
+```
